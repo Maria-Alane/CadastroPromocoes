@@ -18,8 +18,8 @@ public class UsuarioService {
     private final Pattern emailPattern =
             Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 
-    public UsuarioService() {
-        this.usuarioRepository = new UsuarioRepositoryImpl();
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
     }
 
     public void criarUsuario(Usuario usuario) {

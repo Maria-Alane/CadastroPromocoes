@@ -3,6 +3,8 @@ package org.example.app;
 import org.example.exception.DadosInvalidosException;
 import org.example.exception.UsuarioNaoEncontradoException;
 import org.example.model.Usuario;
+import org.example.repository.UsuarioRepository;
+import org.example.repository.UsuarioRepositoryImpl;
 import org.example.service.UsuarioService;
 import org.example.util.Mensagens;
 
@@ -12,10 +14,13 @@ public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static final UsuarioService usuarioService =
-            new UsuarioService();
+    private static final UsuarioRepository usuarioRepository =
+            new UsuarioRepositoryImpl();
 
-    static void main(String[] args) {
+    private static final UsuarioService usuarioService =
+            new UsuarioService(usuarioRepository);
+
+    public static void main(String[] args) {
 
         boolean executando = true;
 
@@ -68,7 +73,7 @@ public class Main {
         System.out.print(Mensagens.INPUT_EMAIL);
         String email = scanner.nextLine();
 
-        Usuario usuario = new Usuario(0, nome, email);
+        Usuario usuario = new Usuario(nome, email);
 
         usuarioService.criarUsuario(usuario);
 
@@ -108,14 +113,12 @@ public class Main {
         System.out.print(Mensagens.ID);
         long id = Long.parseLong(scanner.nextLine());
 
+        Usuario usuario;
+
         try {
-
-            usuarioService.buscarPorId(id);
-
+            usuario = usuarioService.buscarPorId(id);
         } catch (UsuarioNaoEncontradoException e) {
-
             System.out.println(Mensagens.CLIENTE_NAO_ENCONTRADO);
-
             return;
         }
 
@@ -125,14 +128,13 @@ public class Main {
         System.out.print(Mensagens.NOVO_EMAIL);
         String email = scanner.nextLine();
 
-        Usuario usuario =
-                new Usuario(id, nome, email);
+        usuario.setNome(nome);
+        usuario.setEmail(email);
 
         usuarioService.atualizarUsuario(usuario);
 
         System.out.println(Mensagens.CLIENTE_ATUALIZADO);
     }
-
 
 
     private static void removerUsuario() {
