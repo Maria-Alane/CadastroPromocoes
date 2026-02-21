@@ -4,72 +4,56 @@ import org.example.exception.DadosInvalidosException;
 import org.example.exception.UsuarioNaoEncontradoException;
 import org.example.model.Usuario;
 import org.example.repository.UsuarioRepository;
-import org.example.repository.UsuarioRepositoryImpl;
 import org.example.util.Mensagens;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-
+@Service
 public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
-
+    private final UsuarioRepository repository;
     private final Pattern emailPattern =
             Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public UsuarioService(UsuarioRepository repository) {
+        this.repository = repository;
     }
 
     public void criarUsuario(Usuario usuario) {
-
         validarUsuario(usuario);
-
-        usuarioRepository.salvar(usuario);
+        repository.save(usuario);
     }
 
     public List<Usuario> listarUsuarios() {
-
-        return usuarioRepository.listarTodos();
+        return repository.findAll();
     }
 
     public Usuario buscarPorId(long id) {
-
-        Usuario usuario = usuarioRepository.buscarPorId(id);
-
-        if (usuario == null) {
-            throw new UsuarioNaoEncontradoException(Mensagens.CLIENTE_NAO_ENCONTRADO);
-        }
-
-        return usuario;
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new UsuarioNaoEncontradoException(Mensagens.CLIENTE_NAO_ENCONTRADO));
     }
 
     public void atualizarUsuario(Usuario usuario) {
-
         validarUsuario(usuario);
-
         buscarPorId(usuario.getId());
-
-        usuarioRepository.atualizar(usuario);
+        repository.save(usuario);
     }
 
-    public boolean removerUsuario(long id) {
-
-        buscarPorId(id);
-
-        return usuarioRepository.remover(id);
+    public void removerUsuario(long id) {
+        if (!repository.existsById(id)) {
+            throw new UsuarioNaoEncontradoException(Mensagens.CLIENTE_NAO_ENCONTRADO);
+        }
+        repository.deleteById(id);
     }
 
     private void validarUsuario(Usuario usuario) {
-
         if (usuario.getNome() == null || usuario.getNome().isBlank()) {
             throw new DadosInvalidosException(Mensagens.NOME_INVALIDO);
         }
-
-        if (usuario.getEmail() == null ||
-                !emailPattern.matcher(usuario.getEmail()).matches()) {
-
+        if (usuario.getEmail() == null || !emailPattern.matcher(usuario.getEmail()).matches()) {
             throw new DadosInvalidosException(Mensagens.EMAIL_INVALIDO);
         }
     }

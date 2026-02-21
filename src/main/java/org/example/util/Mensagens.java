@@ -26,9 +26,9 @@ public final class Mensagens {
     public static final String MENU_OPCAO_SAIR
             = "0 - Sair";
 
-    public static final String INPUT_NOME = "Nome: ";
+    public static final String INPUT_NOME = "Nome (0 para MENU): ";
 
-    public static final String INPUT_EMAIL = "Email: ";
+    public static final String INPUT_EMAIL = "Email (0 para MENU): ";
 
     public static final String CLIENTE_CADASTRADO_SUCESSO
             = "Cliente cadastrado com sucesso.";
@@ -62,18 +62,21 @@ public final class Mensagens {
     public static final String DIGITE_APENAS_NUMEROS =
             "Digite apenas números.";
 
-    public static final String ID = "ID: ";
+    public static final String ID = "ID (0 para MENU): ";
 
     public static final String NOVO_NOME =
-            "Novo nome: ";
+            "Novo nome: (0 para MENU) ";
 
     public static final String NOVO_EMAIL =
-            "Novo email: ";
+            "Novo email: (0 para MENU) ";
 
     public static final String NOME_INVALIDO =
             "Nome inválido.";
 
     public static final String EMAIL_INVALIDO =
             "Email inválido.";
+
+    public static final String VOLTAR_MENU =
+            "\nRetornando ao menu...";
 
 }

@@ -1,18 +1,7 @@
 package org.example.repository;
 
 import org.example.model.Usuario;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface UsuarioRepository {
-
-    void salvar(Usuario usuario);
-
-    List<Usuario> listarTodos();
-
-    Usuario buscarPorId(long id);
-
-    void atualizar(Usuario usuario);
-
-    boolean remover(long id);
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 }
