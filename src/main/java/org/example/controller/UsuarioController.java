@@ -28,9 +28,32 @@ public class UsuarioController {
         return "form";
     }
 
-    @PostMapping
+    @PostMapping("/novo")
     public String salvar(@ModelAttribute Usuario usuario) {
         service.criarUsuario(usuario);
+        return "redirect:/usuarios";
+    }
+
+    @GetMapping("/buscar")
+    public String buscarUsuarioPorId(@RequestParam Long id, Model model) {
+        Usuario usuario = service.buscarPorId(id);
+        model.addAttribute("usuarios", java.util.List.of(usuario));
+        return "usuarios";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        Usuario usuario = service.buscarPorId(id);
+        model.addAttribute("usuario", usuario);
+        return "form";
+    }
+
+    @PostMapping("/editar/{id}")
+    public String atualizar(@PathVariable Long id, @ModelAttribute Usuario usuario) {
+        Usuario usuarioExistente = service.buscarPorId(id);
+        usuarioExistente.setNome(usuario.getNome());
+        usuarioExistente.setEmail(usuario.getEmail());
+        service.atualizarUsuario(usuarioExistente);
         return "redirect:/usuarios";
     }
 

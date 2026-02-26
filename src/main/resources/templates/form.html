@@ -2,16 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Novo Usuário</title>
+    <title th:text="${usuario.id} != null ? 'Editar Usuário' : 'Novo Usuário'">Novo Usuário</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container mt-5">
 
-    <h2>Novo Usuário</h2>
+    <h2 th:text="${usuario.id} != null ? 'Editar Usuário' : 'Novo Usuário'">Novo Usuário</h2>
 
-    <form th:action="@{/usuarios}" th:object="${usuario}" method="post">
+    <form th:action="${usuario.id} != null ? @{/usuarios/editar/{id}(id=${usuario.id})} : @{/usuarios/novo}"
+          th:object="${usuario}" method="post">
+
+        <!-- ID hidden -->
+        <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
             <label class="form-label">Nome</label>
@@ -23,7 +27,7 @@
             <input type="email" th:field="*{email}" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn btn-success">Salvar</button>
+        <button type="submit" class="btn btn-success" th:text="${usuario.id} != null ? 'Salvar' : 'Criar'">Salvar</button>
         <a href="/usuarios" class="btn btn-secondary">Voltar</a>
 
     </form>
